@@ -1,0 +1,4 @@
+#!/bin/bash
+# Test only: never elevate privileges. Log the request then run the mock.
+printf '%s\n' "$*" >> "${MOCK_TM_SUDO_LOG:?}"
+exec "$@"

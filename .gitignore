@@ -1,0 +1,43 @@
+# Never commit real Notes stores, private Time Machine data, or exports.
+group.com.apple.notes/
+**/NoteStore.sqlite*
+*.sqlite
+*.sqlite-*
+*.db
+*.db-*
+*.keychain-db
+*.csv
+*.dmg
+*.sparsebundle
+*.zip
+*.log
+*.bak
+dist/
+
+# Local fixtures and staged/previous copies.
+notes-migrator-test.*/
+.notes-migrator-stage.*/
+.group.com.apple.notes.pre-migration-*/
+NotesMigratorBackups/
+FlashnoteExports/
+flashnote-manifest.json
+__pycache__/
+*.pyc
+
+# macOS, editor and local credentials.
+.DS_Store
+._*
+.AppleDouble
+.Spotlight-V100
+.Trashes
+.env
+.env.*
+credentials/
+secrets/
+.vscode/
+.idea/
+*.swp
+*~
+
+# One-time owner-only GitHub publisher; never commit or release.
+publish.sh

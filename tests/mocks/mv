@@ -1,0 +1,12 @@
+#!/bin/bash
+if [[ "${MOCK_FAIL_INSTALL:-}" == 1 ]]; then
+  case "${1:-}" in
+    */.notes-migrator-stage.*/group.com.apple.notes)
+      if [[ ! -e "$MOCK_FAIL_MARKER" ]]; then
+        printf 'simulated failure\n' > "$MOCK_FAIL_MARKER"
+        exit 1
+      fi
+      ;;
+  esac
+fi
+exec /bin/mv "$@"

@@ -1,0 +1,33 @@
+name: Migration safety tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  simulated-migration:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v7
+      - name: Check Bash syntax
+        run: |
+          for script in macos-notes-migrator.sh tests/*.sh tests/mocks/*; do
+            bash -n "$script"
+          done
+      - name: Check backup, migration and restored attachments
+        run: bash tests/unit_test.sh
+      - name: Check Flashnote SQLite conversion and hierarchy
+        run: python3 -B tests/flashnote_test.py
+      - name: Check refusals and transactional rollback
+        run: bash tests/refusal_test.sh
+      - name: Check project privacy
+        run: bash tests/privacy_test.sh

@@ -1,0 +1,23 @@
+#!/bin/bash
+case "${1:-}" in
+  destinationinfo)
+    [[ -n "${MOCK_TM_MOUNT_POINT:-}" ]] || exit 0
+    printf 'Name : Test Backup\nMount Point : %s\n' "$MOCK_TM_MOUNT_POINT"
+    ;;
+  listbackups)
+    case " $* " in
+      *' -m '*)
+        [[ -n "${MOCK_TM_MOUNTED_BACKUPS:-}" ]] || exit 1
+        printf '%s\n' "$MOCK_TM_MOUNTED_BACKUPS"
+        ;;
+      *)
+        if [[ -n "${MOCK_TM_BACKUPS:-}" && -f "$MOCK_TM_BACKUPS" ]]; then
+          while IFS= read -r snapshot; do
+            printf '%s\n' "$snapshot"
+          done < "$MOCK_TM_BACKUPS"
+        fi
+        ;;
+    esac
+    ;;
+  *) exit 1 ;;
+esac

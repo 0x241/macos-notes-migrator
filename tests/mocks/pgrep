@@ -1,0 +1,3 @@
+#!/bin/bash
+# Unit fixtures have no actual Notes app or background agents.
+exit 1

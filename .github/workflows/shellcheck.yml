@@ -1,0 +1,20 @@
+name: ShellCheck
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Install ShellCheck
+        run: sudo apt-get update && sudo apt-get install -y shellcheck
+      - name: Lint scripts
+        run: shellcheck macos-notes-migrator.sh tests/*.sh tests/mocks/*

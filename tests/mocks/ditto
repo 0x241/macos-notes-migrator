@@ -1,0 +1,7 @@
+#!/bin/bash
+[[ "${1:-}" == --rsrc ]] || exit 2
+source_dir=${2:-}
+destination=${3:-}
+[[ -d "$source_dir" && -n "$destination" ]] || exit 2
+mkdir -p "$destination"
+cp -R "$source_dir/." "$destination/"

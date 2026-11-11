@@ -1,0 +1,6 @@
+#!/bin/bash
+{
+  printf 'OPEN'
+  printf '\t%s' "$@"
+  printf '\n'
+} >> "$MOCK_OPEN_LOG"

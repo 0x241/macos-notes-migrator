@@ -1,0 +1,38 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  source-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Run simulated safety checks
+        run: |
+          python3 -B tests/flashnote_test.py
+          bash tests/unit_test.sh
+          bash tests/refusal_test.sh
+          bash tests/privacy_test.sh
+      - name: Bundle public source
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          mkdir -p dist
+          zip -q -r "dist/macos-notes-migrator-${RELEASE_TAG}.zip" \
+            macos-notes-migrator.sh flashnote-to-notes.py README.md LICENSE \
+            CHANGELOG.md SECURITY.md .gitignore .github tests
+          (cd dist && sha256sum "macos-notes-migrator-${RELEASE_TAG}.zip" > SHA256SUMS)
+      - name: Create release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          gh release create "$RELEASE_TAG" \
+            "dist/macos-notes-migrator-${RELEASE_TAG}.zip" dist/SHA256SUMS \
+            --title "macOS Notes Migrator ${RELEASE_TAG}" \
+            --verify-tag --generate-notes
